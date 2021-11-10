@@ -88,7 +88,51 @@ namespace MoreDynamicQuery
             return false;
         }
 
+#pragma warning disable RCS1163 // Unused parameter.
+        private static bool DynamicQueryIsNotNullOrWhiteSpace(object source, object value)
+#pragma warning restore RCS1163 // Unused parameter.
+        {
+            if (source is string)
+            {
+                return !string.IsNullOrWhiteSpace(source?.ToString());
+            }
+
+            if (source is Array)
+            {
+                return source != null && ((Array)source).Length > 0;
+            }
+
+            if (source is IEnumerable)
+            {
+                return source != null && ((IEnumerable<object>)source).Any();
+            }
+            return false;
+        }
+
+#pragma warning disable RCS1163 // Unused parameter.
+        private static bool DynamicQueryIsNullOrWhiteSpace(object source, object value)
+#pragma warning restore RCS1163 // Unused parameter.
+        {
+            if (source is string)
+            {
+                return string.IsNullOrWhiteSpace(source?.ToString());
+            }
+
+            if (source is Array)
+            {
+                return source == null || ((Array)source).Length == 0;
+            }
+
+            if (source is IEnumerable)
+            {
+                return source == null || !((IEnumerable<object>)source).Any();
+            }
+            return false;
+        }
+
+#pragma warning disable RCS1163 // Unused parameter.
         private static bool DynamicQueryIsNotNullOrEmpty(object source, object value)
+#pragma warning restore RCS1163 // Unused parameter.
         {
             if (source is string)
             {
@@ -102,12 +146,14 @@ namespace MoreDynamicQuery
 
             if (source is IEnumerable)
             {
-                return source != null && ((IEnumerable<object>)source).Count() > 0;
+                return source != null && ((IEnumerable<object>)source).Any();
             }
             return false;
         }
 
+#pragma warning disable RCS1163 // Unused parameter.
         private static bool DynamicQueryIsNullOrEmpty(object source, object value)
+#pragma warning restore RCS1163 // Unused parameter.
         {
             if (source is string)
             {
@@ -121,7 +167,7 @@ namespace MoreDynamicQuery
 
             if (source is IEnumerable)
             {
-                return source == null || ((IEnumerable<object>)source).Count() == 0;
+                return source == null || !((IEnumerable<object>)source).Any();
             }
             return false;
         }
@@ -151,19 +197,32 @@ namespace MoreDynamicQuery
             return false;
         }
 
-        public static IQueryable<TModel> DynamicWhere<TModel>(this IQueryable<TModel> iqueryable, IEnumerable<DynamicFilter> dynamicFilters)
+        public static IQueryable<TModel> DynamicWhere<TModel>(this IQueryable<TModel> queryable, params DynamicFilter[] dynamicFilters)
         {
-            return iqueryable.Where(Filter<TModel>(dynamicFilters));
+            return queryable.Where(Filter<TModel>(dynamicFilters));
+        }
+        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] arrays, params DynamicFilter[] dynamicFilters)
+        {
+            return arrays.AsQueryable().Where(Filter<TModel>(dynamicFilters));
+        }
+        public static IQueryable<TModel> DynamicWhere<TModel>(this IEnumerable<TModel> enumerable, params DynamicFilter[] dynamicFilters)
+        {
+            return enumerable.AsQueryable().DynamicWhere(dynamicFilters);
         }
 
-        public static IQueryable<TModel> DynamicWhere<TModel>(this IEnumerable<TModel> ienumerable, IEnumerable<DynamicFilter> dynamicFilters)
+        public static IQueryable<TModel> DynamicWhere<TModel>(this IQueryable<TModel> queryable, IEnumerable<DynamicFilter> dynamicFilters)
         {
-            return ienumerable.AsQueryable().DynamicWhere(dynamicFilters);
+            return queryable.Where(Filter<TModel>(dynamicFilters));
         }
 
-        public static IQueryable<TModel> DynamicWhere<TModel>(this ICollection<TModel> icollection, IEnumerable<DynamicFilter> dynamicFilters)
+        public static IQueryable<TModel> DynamicWhere<TModel>(this IEnumerable<TModel> enumerable, IEnumerable<DynamicFilter> dynamicFilters)
         {
-            return icollection.AsQueryable().DynamicWhere(dynamicFilters);
+            return enumerable.AsQueryable().DynamicWhere(dynamicFilters);
+        }
+
+        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] arrays, IEnumerable<DynamicFilter> dynamicFilters)
+        {
+            return arrays.AsQueryable().DynamicWhere(dynamicFilters);
         }
 
         private static Expression<Func<TModel, bool>> Filter<TModel>(IEnumerable<DynamicFilter> dynamicModel)
@@ -206,8 +265,14 @@ namespace MoreDynamicQuery
                     MethodInfo isNullOrEmptyMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryIsNullOrEmpty), BindingFlags.NonPublic | BindingFlags.Static);
                     return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, isNullOrEmptyMethod);
                 case ComparisonFilter.IsNotNullOrEmpty:
-                    MethodInfo IsNotNullOrEmptyMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryIsNotNullOrEmpty), BindingFlags.NonPublic | BindingFlags.Static);
-                    return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, IsNotNullOrEmptyMethod);
+                    MethodInfo isNotNullOrEmptyMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryIsNotNullOrEmpty), BindingFlags.NonPublic | BindingFlags.Static);
+                    return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, isNotNullOrEmptyMethod);
+                case ComparisonFilter.IsNullOrWhiteSpace:
+                    MethodInfo isNullOrWhiteSpaceMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryIsNullOrWhiteSpace), BindingFlags.NonPublic | BindingFlags.Static);
+                    return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, isNullOrWhiteSpaceMethod);
+                case ComparisonFilter.IsNotNullOrWhiteSpace:
+                    MethodInfo isNotNullOrWhiteSpaceMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryIsNotNullOrWhiteSpace), BindingFlags.NonPublic | BindingFlags.Static);
+                    return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, isNotNullOrWhiteSpaceMethod);
                 case ComparisonFilter.Contains:
                     MethodInfo containsMethod = typeof(MoreDynamicQueryExtensions).GetMethod(nameof(DynamicQueryContains), BindingFlags.NonPublic | BindingFlags.Static);
                     return Expression.MakeBinary(ExpressionType.Equal, memberExpression, constantExpression, false, containsMethod);

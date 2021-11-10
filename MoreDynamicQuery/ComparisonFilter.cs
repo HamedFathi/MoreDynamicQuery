@@ -10,6 +10,8 @@
         NotEqual,
         IsNullOrEmpty,
         IsNotNullOrEmpty,
+        IsNullOrWhiteSpace,
+        IsNotNullOrWhiteSpace,
         Contains,
         DoesNotContain,
         StartsWith,
