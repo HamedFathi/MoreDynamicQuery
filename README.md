@@ -9,15 +9,15 @@ var filters = new List<DynamicFilter>();
 var df1 = new DynamicFilter()
 {
     ComparisonFilter = ComparisonFilter.DoesNotContain,
-    PropertyValue = "h",
-    PropertyName = nameof(Person.Name)
+    PropertyName = nameof(Person.Name),
+    PropertyValue = "h"
 };
 
 var df2 = new DynamicFilter()
 {
     ComparisonFilter = ComparisonFilter.Contains,
-    PropertyValue = "f",
-    PropertyName = nameof(Person.FamilyName)
+    PropertyName = nameof(Person.FamilyName),
+    PropertyValue = "f"
 };
 
 filters.Add(df1);
@@ -27,7 +27,7 @@ filters.Add(df2);
 var result = people.DynamicWhere(filters).ToList();
 ```
 
-![Screenshot_1](https://user-images.githubusercontent.com/8418700/141105111-a59ea167-c5d0-46eb-a62a-0cf80becc709.png)
+![MoreDynamicQuery](https://user-images.githubusercontent.com/8418700/141125107-9409724b-9165-4cee-9ef6-3e72f6194bf0.png)
 
 It supports these comparison filters:
 
