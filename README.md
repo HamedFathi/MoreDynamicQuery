@@ -22,21 +22,21 @@ var users = _dbContext.Users.DynamicWhere(query).ToList();
 It supports these comparison methods:
 
 ```
-LessThan,
-LessThanEqual,
-GreaterThan,
-GreaterThanEqual,
-Equal,
-NotEqual,
-IsNullOrEmpty,
-IsNotNullOrEmpty,
-Contains,
-DoesNotContain,
-StartsWith,
-DoesNotStartWith,
-EndsWith,
-DoesNotEndWith,
-Like,
+LessThan
+LessThanEqual
+GreaterThan
+GreaterThanEqual
+Equal
+NotEqual
+IsNullOrEmpty
+IsNotNullOrEmpty
+Contains
+DoesNotContain
+StartsWith
+DoesNotStartWith
+EndsWith
+DoesNotEndWith
+Like
 NotLike
 ```
 
