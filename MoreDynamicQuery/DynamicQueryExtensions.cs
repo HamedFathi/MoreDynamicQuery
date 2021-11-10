@@ -7,20 +7,6 @@ using System.Reflection;
 
 namespace MoreDynamicQuery
 {
-    // var dyn = new List<DynamicModel>();
-    // dyn.Add(new DynamicFilter()
-    // {
-    //      ComparisonMethod = ComparisonMethod.DoesNotContain,
-    //      PropertyValue = "s",
-    //      PropertyName = "FamilyName"
-    // });
-    // dyn.Add(new DynamicFilter()
-    // {
-    //      ComparisonMethod = ComparisonMethod.Contains,
-    //      PropertyValue = "a",
-    //      PropertyName = "Name"
-    // });
-    // var people = _dbContext.Users.DynamicWhere(dyn).ToList();
     public static class MoreDynamicQueryExtensions
     {
         private static bool DynamicQueryContains(object source, object value)
@@ -201,9 +187,9 @@ namespace MoreDynamicQuery
         {
             return queryable.Where(Filter<TModel>(dynamicFilters));
         }
-        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] arrays, params DynamicFilter[] dynamicFilters)
+        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] array, params DynamicFilter[] dynamicFilters)
         {
-            return arrays.AsQueryable().Where(Filter<TModel>(dynamicFilters));
+            return array.AsQueryable().Where(Filter<TModel>(dynamicFilters));
         }
         public static IQueryable<TModel> DynamicWhere<TModel>(this IEnumerable<TModel> enumerable, params DynamicFilter[] dynamicFilters)
         {
@@ -220,9 +206,9 @@ namespace MoreDynamicQuery
             return enumerable.AsQueryable().DynamicWhere(dynamicFilters);
         }
 
-        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] arrays, IEnumerable<DynamicFilter> dynamicFilters)
+        public static IQueryable<TModel> DynamicWhere<TModel>(this TModel[] array, IEnumerable<DynamicFilter> dynamicFilters)
         {
-            return arrays.AsQueryable().DynamicWhere(dynamicFilters);
+            return array.AsQueryable().DynamicWhere(dynamicFilters);
         }
 
         private static Expression<Func<TModel, bool>> Filter<TModel>(IEnumerable<DynamicFilter> dynamicModel)
@@ -233,7 +219,7 @@ namespace MoreDynamicQuery
                 ParameterExpression parameterExpression = Expression.Parameter(typeof(TModel));
                 MemberExpression memberExpression = Expression.Property(parameterExpression, item.PropertyName);
                 ConstantExpression constantExpression = Expression.Constant(item.PropertyValue);
-                BinaryExpression comparison = GetBinaryExpression(item.ComparisonMethod, memberExpression, constantExpression);
+                BinaryExpression comparison = GetBinaryExpression(item.ComparisonFilter, memberExpression, constantExpression);
                 var expression = Expression.Lambda<Func<TModel, bool>>(comparison, parameterExpression);
                 var param = Expression.Parameter(typeof(TModel), "x");
                 var body = Expression.AndAlso(

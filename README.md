@@ -8,14 +8,14 @@ var filters = new List<DynamicFilter>();
 
 var df1 = new DynamicFilter()
 {
-    ComparisonMethod = ComparisonFilter.DoesNotContain,
+    ComparisonFilter = ComparisonFilter.DoesNotContain,
     PropertyValue = "h",
     PropertyName = nameof(Person.Name)
 };
 
 var df2 = new DynamicFilter()
 {
-    ComparisonMethod = ComparisonFilter.Contains,
+    ComparisonFilter = ComparisonFilter.Contains,
     PropertyValue = "f",
     PropertyName = nameof(Person.FamilyName)
 };
