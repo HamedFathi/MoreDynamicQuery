@@ -27,7 +27,7 @@ filters.Add(df2);
 var result = people.DynamicWhere(filters).ToList();
 ```
 
-![Screenshot_1](https://user-images.githubusercontent.com/8418700/141104042-795ef4e1-cb11-44c0-b5ac-6077f9d9f171.png)
+![Screenshot_1](https://user-images.githubusercontent.com/8418700/141105111-a59ea167-c5d0-46eb-a62a-0cf80becc709.png)
 
 It supports these comparison filters:
 
