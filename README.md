@@ -23,7 +23,7 @@ var df2 = new DynamicFilter()
 filters.Add(df1);
 filters.Add(df2);
 
-// var users = people.DynamicWhere(df1, df2).ToList();
+// var result = people.DynamicWhere(df1, df2).ToList();
 var result = people.DynamicWhere(filters).ToList();
 ```
 
