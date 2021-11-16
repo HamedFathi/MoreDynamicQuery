@@ -1,6 +1,7 @@
 // Fluent Syntax
 
 .Rule("PropertyName", Filter, params objects[] Values)
+.Rule<T>(x => x.PropertyName, Filter, params objects[] Values)
 .And()
 .Or()
 .Not()
