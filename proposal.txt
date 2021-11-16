@@ -1,0 +1,63 @@
+// Fluent Syntax
+
+.Rule("PropertyName", Filter, params objects[] Values)
+.And()
+.Or()
+.Not()
+.StartGroup()
+.EndGroup()
+
+// -----------------------------------------------------
+// Filter
+
+LessThan,
+LessThanEqual,
+GreaterThan,
+GreaterThanEqual,
+Equal,
+NotEqual,
+IsNullOrEmpty,
+IsNotNullOrEmpty,
+IsNullOrWhiteSpace,
+IsNotNullOrWhiteSpace,
+Contains,
+DoesNotContain,
+StartsWith,
+DoesNotStartWith,
+EndsWith,
+DoesNotEndWith,
+Like,
+NotLike
+
+// -----------------------------------------------------
+// Result
+
+public class DynamicRule
+{
+    public string PropertyName { get; set; }
+    public string Type { get; set; }
+    public Filter Filter { get; set; }
+    public object PropertyValue { get; set; }
+    public Operator Operator { get; set; } = Operator.None; 
+    public List<DynamicRule> Rules { get; set; }
+    public bool Not { get; set; } = false;
+
+    public DynamicRule()
+    {
+        Rules = new List<DynamicRule>();
+    }
+}
+
+public class DynamicQuery
+{
+    public Operator Operator { get; set; } = Operator.None;
+
+    public List<DynamicRule> Rules { get; set; }
+
+    public bool Not { get; set; } = false;
+
+    public DynamicQuery()
+    {
+        Rules = new List<DynamicRule>();
+    }
+}
