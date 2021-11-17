@@ -7,8 +7,10 @@
 .Not()
 .StartGroup()
 .EndGroup()
+.Build
+.Build(x => Sort, ASC/DESC) // If possible to support.
 
-// -----------------------------------------------------
+// ------------------------------------------------------------------
 // Filter
 
 LessThan,
@@ -30,8 +32,8 @@ DoesNotEndWith,
 Like,
 NotLike
 
-// -----------------------------------------------------
-// Result
+// ------------------------------------------------------------------
+// Query Result
 
 public class DynamicRule
 {
