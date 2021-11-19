@@ -1,3 +1,5 @@
+Support Serialization
+// ------------------------------------------------------------------
 // Fluent Syntax
 
 .Rule("PropertyName", Filter, params objects[] Values)
