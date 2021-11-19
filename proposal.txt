@@ -1,4 +1,5 @@
 Support Serialization
+
 // ------------------------------------------------------------------
 // Fluent Syntax
 
@@ -11,6 +12,13 @@ Support Serialization
 .EndGroup()
 .Build
 .Build(x => Sort, ASC/DESC) // If possible to support.
+
+// ------------------------------------------------------------------
+// Operator
+
+None,
+And,
+Or
 
 // ------------------------------------------------------------------
 // Filter
